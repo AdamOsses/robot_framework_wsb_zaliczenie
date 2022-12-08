@@ -13,7 +13,19 @@ ${LOG_IN_INDEX}    //*[@id="login2"]
 ${USERNAME_OKNO_LOGOWANIA}    //*[@id="loginusername"]
 ${LOG_IN_OKNO_LOGOWANIA}    //button[contains(text(),'Log in')]
 
+${ADD_TO_A_CART_BTN}    //*[@class="btn btn-success btn-lg"]
+
 *** Keywords ***
+Zamow Produkt
+    [Arguments]    ${produkt}
+    Wait Until Page Contains Element    ${produkt}
+    Click Link    ${produkt}
+    Wait Until Page Contains Element    ${ADD_TO_A_CART_BTN}
+    Click Link    ${ADD_TO_A_CART_BTN}
+    Handle Alert
+    Go To    ${URL}
+
+
 Kliknij Log in
     Click Element    ${LOG_IN_INDEX}
 
@@ -38,8 +50,9 @@ ID 001 Logowanie Bez Wprowadzenia Hasla
     Kliknij Log in
     Wprowadz Nazwe Uzytkownika
     Kliknij Log in W Oknie Logowania
-    Sleep    5
+    Sleep    2
     Alert Should Be Present    Please fill out Username and Password.
-    Sleep    4
+    Sleep    2
 
-
+ID 002 Poprawnosc Kwoty Do Zaplaty
+    Zamow Produkt    //a[@href="prod.html?idp_=1"]
