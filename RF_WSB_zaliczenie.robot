@@ -15,17 +15,11 @@ ${USERNAME_OKNO_LOGOWANIA}    //*[@id="loginusername"]
 ${LOG_IN_OKNO_LOGOWANIA}    //button[contains(text(),'Log in')]
 
 ${ADD_TO_A_CART_BTN}    //*[@class="btn btn-success btn-lg"]
+${CART}    //*[@id="cartur"]
+${PRICE}    //*[@class="success"]//td[3]
+${TOTAL}    //*[@id="totalp"]
 
 *** Keywords ***
-Zamow Produkt
-    [Arguments]    ${produkt}
-    Wait Until Page Contains Element    ${produkt}
-    Click Link    ${produkt}
-    Wait Until Page Contains Element    ${ADD_TO_A_CART_BTN}
-    Click Link    ${ADD_TO_A_CART_BTN}
-    Handle Alert
-    Go To    ${URL}
-
 
 Kliknij Log in
     Click Element    ${LOG_IN_INDEX}
@@ -40,11 +34,45 @@ Otworz Strone Demoblaze
     Open browser    about:blank    ${BROWSER}
     Maximize Browser Window
     Go To    ${URL}
+    Sleep    4
     Log to console    Otwieram strone demoblaze
 
 Zamknij Strone Demoblaze
     Close All Browsers
     Log to console    Zamykam okno
+
+Zamow Produkt
+    [Arguments]    ${produkt}
+    Wait Until Page Contains Element    ${produkt}
+    Click Link    ${produkt}
+    Wait Until Page Contains Element    ${ADD_TO_A_CART_BTN}
+    Click Link    ${ADD_TO_A_CART_BTN}
+    Handle Alert
+    Go To    ${URL}
+
+Zamow Kilka Produktow
+    ${liczba_wyswietlonych_produktow}=    Get Element Count    //a[@class="hrefch"]
+    ${nr}=    Convert To Number    ${liczba_wyswietlonych_produktow}
+    ${ile_produktow_zamowic}=    Evaluate    random.randint(2,9)    random
+
+    FOR    ${i}    IN RANGE    ${ile_produktow_zamowic}
+        ${wylosowany_produkt}=    Evaluate    random.randint(1, ${nr})    random
+        Zamow Produkt    (//a[@class="hrefch"])[${wylosowany_produkt}]
+    END
+
+Podlicz Kwote Do Zaplaty
+    Click Link    ${CART}
+    Wait Until Page Contains Element    ${PRICE}
+    @{ceny}=    Get Webelements    ${PRICE}
+    ${kwota_do_zaplaty}=   Set Variable    ${0}
+    FOR    ${cena_produktu}    IN    @{ceny}
+        ${cena}=    Get Text    ${cena_produktu}
+        Log to console    Cena produktu: ${cena}
+        ${kwota_do_zaplaty}=   Evaluate    ${kwota_do_zaplaty} + ${cena}
+    END
+    Log to console    SUMA: ${kwota_do_zaplaty}
+    RETURN    ${kwota_do_zaplaty}
+
 
 *** Test Cases ***
 ID 001 Logowanie Bez Wprowadzenia Hasla
@@ -56,11 +84,10 @@ ID 001 Logowanie Bez Wprowadzenia Hasla
     Sleep    2
 
 ID 002 Poprawnosc Kwoty Do Zaplaty
-    Sleep    5
-    ${liczba_produktow}=    Get Element Count    //a[@class="hrefch"]
-    ${nr}=    Convert To Number    ${liczba_produktow}
-    ${wylosowany_nr}=    Evaluate    random.randint(1, ${nr})    random
-    Log to console    Liczba prod. na stronie: ${liczba_produktow} - wylosowany nr: ${wylosowany_nr}
-    Click Link    (//a[@class="hrefch"])[${wylosowany_nr}]
-    Sleep    4
-    #Zamow Produkt    //a[@href="prod.html?idp_=1"]
+    Zamow Kilka Produktow
+    ${do_zaplaty}=    Podlicz Kwote Do Zaplaty
+    ${kwota_total}=    Get Text    //*[@id="totalp"]
+    Log to console    DO ZAPLATY: ${do_zaplaty} i TOTAL: ${kwota_total}
+    Should Be Equal As Integers   ${do_zaplaty}    ${kwota_total}    Kwota "TOTAL" rozni sie od calkowitej ceny zamawionych produktow.
+
+
