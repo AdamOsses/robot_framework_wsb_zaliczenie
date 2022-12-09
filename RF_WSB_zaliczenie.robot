@@ -1,5 +1,6 @@
 *** Settings ***
 library    SeleniumLibrary
+library    String
 
 Test Setup    Otworz Strone Demoblaze
 Test Teardown    Zamknij Strone Demoblaze
@@ -55,4 +56,11 @@ ID 001 Logowanie Bez Wprowadzenia Hasla
     Sleep    2
 
 ID 002 Poprawnosc Kwoty Do Zaplaty
-    Zamow Produkt    //a[@href="prod.html?idp_=1"]
+    Sleep    5
+    ${liczba_produktow}=    Get Element Count    //a[@class="hrefch"]
+    ${nr}=    Convert To Number    ${liczba_produktow}
+    ${wylosowany_nr}=    Evaluate    random.randint(1, ${nr})    random
+    Log to console    Liczba prod. na stronie: ${liczba_produktow} - wylosowany nr: ${wylosowany_nr}
+    Click Link    (//a[@class="hrefch"])[${wylosowany_nr}]
+    Sleep    4
+    #Zamow Produkt    //a[@href="prod.html?idp_=1"]
