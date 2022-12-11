@@ -59,6 +59,7 @@ Zamow Kilka Produktow
         ${wylosowany_produkt}=    Evaluate    random.randint(1, ${nr})    random
         Zamow Produkt    (//a[@class="hrefch"])[${wylosowany_produkt}]
     END
+    RETURN    ${ile_produktow_zamowic}
 
 Podlicz Kwote Do Zaplaty
     Click Link    ${CART}
@@ -90,4 +91,9 @@ ID 002 Poprawnosc Kwoty Do Zaplaty
     Log to console    DO ZAPLATY: ${do_zaplaty} i TOTAL: ${kwota_total}
     Should Be Equal As Integers   ${do_zaplaty}    ${kwota_total}    Kwota "TOTAL" rozni sie od calkowitej ceny zamawionych produktow.
 
+ID 003 Usuwanie Wszystkich Produktow Z Koszyka
+    ${liczba_zamowionych_produktow}=    Zamow Kilka Produktow
+    Log To Console    Produkty do usuniecia: ${liczba_zamowionych_produktow}
+    # przejdz do koszyka kliknij delete tyle razy ile ${liczba_zamowionych_produktow}
+    # sprawdz czy w koszyku jest pusto
 
