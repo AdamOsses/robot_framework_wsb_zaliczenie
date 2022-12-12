@@ -18,9 +18,10 @@ ${ADD_TO_A_CART_BTN}    //*[@class="btn btn-success btn-lg"]
 ${CART}    //*[@id="cartur"]
 ${PRICE}    //*[@class="success"]//td[3]
 ${TOTAL}    //*[@id="totalp"]
+${DELETE}    //a[contains(text(), "Delete")]
+
 
 *** Keywords ***
-
 Kliknij Log in
     Click Element    ${LOG_IN_INDEX}
 
@@ -94,6 +95,15 @@ ID 002 Poprawnosc Kwoty Do Zaplaty
 ID 003 Usuwanie Wszystkich Produktow Z Koszyka
     ${liczba_zamowionych_produktow}=    Zamow Kilka Produktow
     Log To Console    Produkty do usuniecia: ${liczba_zamowionych_produktow}
-    # przejdz do koszyka kliknij delete tyle razy ile ${liczba_zamowionych_produktow}
-    # sprawdz czy w koszyku jest pusto
+    Click Link    ${CART}
+    FOR    ${i}    IN RANGE   ${liczba_zamowionych_produktow}+3
+      Wait Until Page Does Not Contain Element    ${DELETE}
+      Wait Until Page Contains Element    ${DELETE}    error=W koszyku powinien byc jeszcze co najmniej jeden produkt.
+      Click Link    ${DELETE}
+      Log To Console    Klikam DELETE ${i}
+    END
+
+    Wait Until Page Does Not Contain Element    ${DELETE}
+    Run Keyword And Ignore Error    Wait Until Page Contains Element    ${DELETE}
+    Page Should Not Contain Element    ${DELETE}    Koszyk powinien byc pusty.
 
