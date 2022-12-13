@@ -1,6 +1,5 @@
 *** Settings ***
 library    SeleniumLibrary
-library    String
 
 Test Setup    Otworz Strone Demoblaze
 Test Teardown    Zamknij Strone Demoblaze
@@ -35,7 +34,7 @@ Otworz Strone Demoblaze
     Open browser    about:blank    ${BROWSER}
     Maximize Browser Window
     Go To    ${URL}
-    Sleep    4
+    Sleep    2
     Log to console    Otwieram strone demoblaze
 
 Zamknij Strone Demoblaze
@@ -75,15 +74,22 @@ Podlicz Kwote Do Zaplaty
     Log to console    SUMA: ${kwota_do_zaplaty}
     RETURN    ${kwota_do_zaplaty}
 
+Usun Z Koszyka Zamowione Produkty
+    [Arguments]    ${liczba_produktow}
+    FOR    ${i}    IN RANGE   ${liczba_produktow}
+      Wait Until Page Does Not Contain Element    ${DELETE}
+      Wait Until Page Contains Element    ${DELETE}    error=W koszyku powinien byc jeszcze co najmniej jeden produkt.
+      Click Link    ${DELETE}
+      Log To Console    Klikam DELETE ${i}
+    END
 
 *** Test Cases ***
 ID 001 Logowanie Bez Wprowadzenia Hasla
     Kliknij Log in
     Wprowadz Nazwe Uzytkownika
     Kliknij Log in W Oknie Logowania
-    Sleep    2
     Alert Should Be Present    Please fill out Username and Password.
-    Sleep    2
+
 
 ID 002 Poprawnosc Kwoty Do Zaplaty
     Zamow Kilka Produktow
@@ -92,16 +98,11 @@ ID 002 Poprawnosc Kwoty Do Zaplaty
     Log to console    DO ZAPLATY: ${do_zaplaty} i TOTAL: ${kwota_total}
     Should Be Equal As Integers   ${do_zaplaty}    ${kwota_total}    Kwota "TOTAL" rozni sie od calkowitej ceny zamawionych produktow.
 
+
 ID 003 Usuwanie Wszystkich Produktow Z Koszyka
     ${liczba_zamowionych_produktow}=    Zamow Kilka Produktow
-    Log To Console    Produkty do usuniecia: ${liczba_zamowionych_produktow}
     Click Link    ${CART}
-    FOR    ${i}    IN RANGE   ${liczba_zamowionych_produktow}+3
-      Wait Until Page Does Not Contain Element    ${DELETE}
-      Wait Until Page Contains Element    ${DELETE}    error=W koszyku powinien byc jeszcze co najmniej jeden produkt.
-      Click Link    ${DELETE}
-      Log To Console    Klikam DELETE ${i}
-    END
+    Usun Z Koszyka Zamowione Produkty    ${liczba_zamowionych_produktow}
 
     Wait Until Page Does Not Contain Element    ${DELETE}
     Run Keyword And Ignore Error    Wait Until Page Contains Element    ${DELETE}
