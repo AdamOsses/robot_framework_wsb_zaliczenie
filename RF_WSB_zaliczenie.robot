@@ -1,4 +1,9 @@
 *** Settings ***
+Documentation    WSB - Tester Oprogramowania
+...              Praca zaliczeniowa z Robot Framework
+...              Skrypt automatyzujcy przypadki testowe
+...              Testowana strona: https://www.demoblaze.com
+
 library    SeleniumLibrary
 
 Test Setup    Otworz Strone Demoblaze
@@ -13,6 +18,7 @@ ${LOG_IN_INDEX}    //*[@id="login2"]
 ${USERNAME_OKNO_LOGOWANIA}    //*[@id="loginusername"]
 ${LOG_IN_OKNO_LOGOWANIA}    //button[contains(text(),'Log in')]
 
+${PRODUKT}    //a[@class="hrefch"]
 ${ADD_TO_A_CART_BTN}    //*[@class="btn btn-success btn-lg"]
 ${CART}    //*[@id="cartur"]
 ${PRICE}    //*[@class="success"]//td[3]
@@ -34,12 +40,10 @@ Otworz Strone Demoblaze
     Open browser    about:blank    ${BROWSER}
     Maximize Browser Window
     Go To    ${URL}
-    Sleep    2
-    Log to console    Otwieram strone demoblaze
+    Wait Until Page Contains Element    ${PRODUKT}
 
 Zamknij Strone Demoblaze
     Close All Browsers
-    Log to console    Zamykam okno
 
 Zamow Produkt
     [Arguments]    ${produkt}
@@ -51,13 +55,13 @@ Zamow Produkt
     Go To    ${URL}
 
 Zamow Kilka Produktow
-    ${liczba_wyswietlonych_produktow}=    Get Element Count    //a[@class="hrefch"]
+    ${liczba_wyswietlonych_produktow}=    Get Element Count    ${PRODUKT}
     ${nr}=    Convert To Number    ${liczba_wyswietlonych_produktow}
     ${ile_produktow_zamowic}=    Evaluate    random.randint(2,9)    random
 
     FOR    ${i}    IN RANGE    ${ile_produktow_zamowic}
         ${wylosowany_produkt}=    Evaluate    random.randint(1, ${nr})    random
-        Zamow Produkt    (//a[@class="hrefch"])[${wylosowany_produkt}]
+        Zamow Produkt    (${PRODUKT})[${wylosowany_produkt}]
     END
     RETURN    ${ile_produktow_zamowic}
 
@@ -68,10 +72,8 @@ Podlicz Kwote Do Zaplaty
     ${kwota_do_zaplaty}=   Set Variable    ${0}
     FOR    ${cena_produktu}    IN    @{ceny}
         ${cena}=    Get Text    ${cena_produktu}
-        Log to console    Cena produktu: ${cena}
         ${kwota_do_zaplaty}=   Evaluate    ${kwota_do_zaplaty} + ${cena}
     END
-    Log to console    SUMA: ${kwota_do_zaplaty}
     RETURN    ${kwota_do_zaplaty}
 
 Usun Z Koszyka Zamowione Produkty
@@ -80,7 +82,6 @@ Usun Z Koszyka Zamowione Produkty
       Wait Until Page Does Not Contain Element    ${DELETE}
       Wait Until Page Contains Element    ${DELETE}    error=W koszyku powinien byc jeszcze co najmniej jeden produkt.
       Click Link    ${DELETE}
-      Log To Console    Klikam DELETE ${i}
     END
 
 *** Test Cases ***
@@ -94,8 +95,7 @@ ID 001 Logowanie Bez Wprowadzenia Hasla
 ID 002 Poprawnosc Kwoty Do Zaplaty
     Zamow Kilka Produktow
     ${do_zaplaty}=    Podlicz Kwote Do Zaplaty
-    ${kwota_total}=    Get Text    //*[@id="totalp"]
-    Log to console    DO ZAPLATY: ${do_zaplaty} i TOTAL: ${kwota_total}
+    ${kwota_total}=    Get Text    ${TOTAL}
     Should Be Equal As Integers   ${do_zaplaty}    ${kwota_total}    Kwota "TOTAL" rozni sie od calkowitej ceny zamawionych produktow.
 
 
@@ -103,7 +103,6 @@ ID 003 Usuwanie Wszystkich Produktow Z Koszyka
     ${liczba_zamowionych_produktow}=    Zamow Kilka Produktow
     Click Link    ${CART}
     Usun Z Koszyka Zamowione Produkty    ${liczba_zamowionych_produktow}
-
     Wait Until Page Does Not Contain Element    ${DELETE}
     Run Keyword And Ignore Error    Wait Until Page Contains Element    ${DELETE}
     Page Should Not Contain Element    ${DELETE}    Koszyk powinien byc pusty.
