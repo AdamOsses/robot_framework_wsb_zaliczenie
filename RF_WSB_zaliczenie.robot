@@ -57,8 +57,7 @@ Zamow Produkt
 Zamow Kilka Produktow
     ${liczba_wyswietlonych_produktow}=    Get Element Count    ${PRODUKT}
     ${nr}=    Convert To Integer    ${liczba_wyswietlonych_produktow}
-    ${ile_produktow_zamowic}=    Evaluate    random.randint(2,9)    random
-
+    ${ile_produktow_zamowic}=    Evaluate    random.randint(2, 9)    random
     FOR    ${i}    IN RANGE    ${ile_produktow_zamowic}
         ${wylosowany_produkt}=    Evaluate    random.randint(1, ${nr})    random
         Zamow Produkt    (${PRODUKT})[${wylosowany_produkt}]
@@ -66,8 +65,9 @@ Zamow Kilka Produktow
     RETURN    ${ile_produktow_zamowic}
 
 Podlicz Kwote Do Zaplaty
+    [Arguments]    ${liczba_produktow}
     Click Link    ${CART}
-    Wait Until Page Contains Element    ${PRICE}
+    Wait Until Page Contains Element    (${PRICE})[${liczba_produktow}]    # Ostatni produkt na liscie
     @{ceny}=    Get Webelements    ${PRICE}
     ${kwota_do_zaplaty}=   Set Variable    ${0}
     FOR    ${cena_produktu}    IN    @{ceny}
@@ -84,6 +84,7 @@ Usun Z Koszyka Zamowione Produkty
       Click Link    ${DELETE}
     END
 
+
 *** Test Cases ***
 ID 001 Logowanie Bez Wprowadzenia Hasla
     Kliknij Log in
@@ -93,8 +94,8 @@ ID 001 Logowanie Bez Wprowadzenia Hasla
 
 
 ID 002 Poprawnosc Kwoty Do Zaplaty
-    Zamow Kilka Produktow
-    ${do_zaplaty}=    Podlicz Kwote Do Zaplaty
+    ${liczba_zamowionych_produktow}=    Zamow Kilka Produktow
+    ${do_zaplaty}=    Podlicz Kwote Do Zaplaty     ${liczba_zamowionych_produktow}
     ${kwota_total}=    Get Text    ${TOTAL}
     Should Be Equal As Integers   ${do_zaplaty}    ${kwota_total}    Kwota "TOTAL" rozni sie od calkowitej ceny zamawionych produktow.
 
