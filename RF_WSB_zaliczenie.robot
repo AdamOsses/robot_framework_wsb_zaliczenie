@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation    WSB - Tester Oprogramowania
 ...              Praca zaliczeniowa z Robot Framework
-...              Skrypt automatyzujcy przypadki testowe
+...              Skrypt automatyzujacy przypadki testowe
 ...              Testowana strona: https://www.demoblaze.com
 
 library    SeleniumLibrary
@@ -56,7 +56,7 @@ Zamow Produkt
 
 Zamow Kilka Produktow
     ${liczba_wyswietlonych_produktow}=    Get Element Count    ${PRODUKT}
-    ${nr}=    Convert To Number    ${liczba_wyswietlonych_produktow}
+    ${nr}=    Convert To Integer    ${liczba_wyswietlonych_produktow}
     ${ile_produktow_zamowic}=    Evaluate    random.randint(2,9)    random
 
     FOR    ${i}    IN RANGE    ${ile_produktow_zamowic}
