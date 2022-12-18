@@ -19,7 +19,7 @@ ${NIEPOPRAWNE_HASLO}    niepoprawne_haslo
 
 
 *** Keywords ***
-Zalogoj Sie
+Zaloguj Sie
     [Arguments]    ${login}    ${haslo}
     Kliknij Log in
     Wprowadz Nazwe Uzytkownika    ${login}
