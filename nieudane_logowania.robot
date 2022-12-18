@@ -1,10 +1,16 @@
 *** Settings ***
+Documentation    WSB - Tester Oprogramowania
+...              Praca zaliczeniowa z Robot Framework
+...              Testy przy uzyciu "Test Template"
+
+resource    base.resource
 resource    logowanie.resource
 
 Test Setup    Otworz Strone Demoblaze
 Test Teardown    Zamknij Strone Demoblaze
 
 Test Template    Zaloguj sie
+
 
 *** Variables ***
 *** Keywords ***

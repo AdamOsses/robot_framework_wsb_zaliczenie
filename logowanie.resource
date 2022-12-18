@@ -4,9 +4,6 @@ Documentation    Zmienne i keywordy obslugujace logowanie uzytkownika
 library    SeleniumLibrary
 
 *** Variables ***
-${BROWSER}    firefox
-${URL}    https://www.demoblaze.com/
-${PRODUKT}    //a[@class="hrefch"]
 ${LOG_IN_INDEX}    //*[@id="login2"]
 ${POLE_USERNAME}    //*[@id="loginusername"]
 ${POLE_HASLO}    //*[@id="loginpassword"]
@@ -41,13 +38,4 @@ Wprowadz Haslo
 
 Kliknij Log in W Oknie Logowania
     Click Button    ${LOG_IN_OKNO_LOGOWANIA}
-
-Otworz Strone Demoblaze
-    Open browser    about:blank    ${BROWSER}
-    Maximize Browser Window
-    Go To    ${URL}
-    Wait Until Page Contains Element    ${PRODUKT}
-
-Zamknij Strone Demoblaze
-    Close All Browsers
 
