@@ -5,19 +5,12 @@ Documentation    WSB - Tester Oprogramowania
 ...              Testowana strona: https://www.demoblaze.com
 
 library    SeleniumLibrary
+resource    logowanie.resource
 
 Test Setup    Otworz Strone Demoblaze
 Test Teardown    Zamknij Strone Demoblaze
 
 *** Variables ***
-${BROWSER}    firefox
-${URL}    https://www.demoblaze.com/
-${NAZWA_UZYTKOWNIKA}    WSB_tester
-
-${LOG_IN_INDEX}    //*[@id="login2"]
-${USERNAME_OKNO_LOGOWANIA}    //*[@id="loginusername"]
-${LOG_IN_OKNO_LOGOWANIA}    //button[contains(text(),'Log in')]
-
 ${PRODUKT}    //a[@class="hrefch"]
 ${ADD_TO_A_CART_BTN}    //*[@class="btn btn-success btn-lg"]
 ${CART}    //*[@id="cartur"]
@@ -27,24 +20,6 @@ ${DELETE}    //a[contains(text(), "Delete")]
 
 
 *** Keywords ***
-Kliknij Log in
-    Click Element    ${LOG_IN_INDEX}
-
-Wprowadz Nazwe Uzytkownika
-    Input Text    ${USERNAME_OKNO_LOGOWANIA}    ${NAZWA_UZYTKOWNIKA}
-
-Kliknij Log in W Oknie Logowania
-    Click Button    ${LOG_IN_OKNO_LOGOWANIA}
-
-Otworz Strone Demoblaze
-    Open browser    about:blank    ${BROWSER}
-    Maximize Browser Window
-    Go To    ${URL}
-    Wait Until Page Contains Element    ${PRODUKT}
-
-Zamknij Strone Demoblaze
-    Close All Browsers
-
 Zamow Produkt
     [Arguments]    ${produkt}
     Wait Until Page Contains Element    ${produkt}
@@ -88,7 +63,7 @@ Usun Z Koszyka Zamowione Produkty
 *** Test Cases ***
 ID 001 Logowanie Bez Wprowadzenia Hasla
     Kliknij Log in
-    Wprowadz Nazwe Uzytkownika
+    Wprowadz Nazwe Uzytkownika    ${POPRAWNA_NAZWA_UZYTKOWNIKA}
     Kliknij Log in W Oknie Logowania
     Alert Should Be Present    Please fill out Username and Password.
 
