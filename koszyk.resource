@@ -13,6 +13,9 @@ ${LICZBA_ZAMOWIONYCH_PRODUKTOW}    ${0}
 
 
 *** Keywords ***
+Przejdz Do Koszyka
+    Click Link    ${CART}
+
 Zamow Produkt
     [Arguments]    ${produkt}
     Wait Until Page Contains Element    ${produkt}
@@ -33,7 +36,6 @@ Zamow Kilka Produktow
     END
 
 Podlicz Kwote Do Zaplaty
-    Click Link    ${CART}
     Wait Until Page Contains Element    (${PRICE})[${LICZBA_ZAMOWIONYCH_PRODUKTOW}]    # Ostatni produkt na liscie
     @{ceny}=    Get Webelements    ${PRICE}
     ${kwota_do_zaplaty}=   Set Variable    ${0}
@@ -44,7 +46,6 @@ Podlicz Kwote Do Zaplaty
     RETURN    ${kwota_do_zaplaty}
 
 Usun Z Koszyka Zamowione Produkty
-    Click Link    ${CART}
     IF    ${LICZBA_ZAMOWIONYCH_PRODUKTOW} < 1
         Should Be True    False    W koszyku brak produktow!
     END

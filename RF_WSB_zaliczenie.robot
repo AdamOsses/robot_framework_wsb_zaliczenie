@@ -23,10 +23,12 @@ ID 001 Logowanie Bez Wprowadzenia Hasla
 
 ID 002 Poprawnosc Kwoty Do Zaplaty
     Zamow Kilka Produktow
+    Przejdz Do Koszyka
     Kwota TOTAL I Suma Kwot Z Kolumny Price Powinny Byc Rowne
 
 ID 003 Usuwanie Wszystkich Produktow Z Koszyka
     Zamow Kilka Produktow
+    Przejdz Do Koszyka
     Usun Z Koszyka Zamowione Produkty
     Koszyk Powinien Byc Pusty
 
