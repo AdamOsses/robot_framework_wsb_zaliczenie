@@ -3,12 +3,14 @@ Documentation    WSB - Tester Oprogramowania
 ...              Praca zaliczeniowa z Robot Framework
 ...              Skrypt automatyzujacy przypadki testowe
 ...              Testowana strona: https://www.demoblaze.com
+Metadata     Autor: Adam Osses
+...         Wersja: 1.0
 
 library    SeleniumLibrary
 
-resource    base.resource
-resource    logowanie.resource
-resource    koszyk.resource
+resource    resources/base.robot
+resource    resources/logowanie.robot
+resource    resources/koszyk.robot
 
 Test Setup    Otworz Strone Demoblaze
 Test Teardown    Zamknij Strone Demoblaze
@@ -17,7 +19,7 @@ Test Teardown    Zamknij Strone Demoblaze
 *** Test Cases ***
 ID 001 Logowanie Bez Wprowadzenia Hasla
     Kliknij Log in
-    Wprowadz Nazwe Uzytkownika    ${POPRAWNA_NAZWA_UZYTKOWNIKA}
+    Wprowadz Nazwe Uzytkownika    WSB_tester
     Kliknij Log in W Oknie Logowania
     Alert Should Be Present    Please fill out Username and Password.
 
