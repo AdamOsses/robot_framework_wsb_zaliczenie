@@ -3,16 +3,14 @@ Documentation    WSB - Tester Oprogramowania
 ...              Praca zaliczeniowa z Robot Framework
 ...              Skrypt automatyzujacy przypadki testowe
 ...              Testowana strona: https://www.demoblaze.com
-Metadata     Autor: Adam Osses
+Metadata     Autor: Adam Osses <adam.osses.ao@gmail.com>
 ...         Wersja: 1.0
-
-library    SeleniumLibrary
 
 resource    resources/base.robot
 resource    resources/logowanie.robot
 resource    resources/koszyk.robot
 
-Test Setup    Otworz Strone Demoblaze
+Test Setup       Otworz Strone Demoblaze
 Test Teardown    Zamknij Strone Demoblaze
 
 

@@ -3,13 +3,13 @@ Documentation    WSB - Tester Oprogramowania
 ...              Praca zaliczeniowa z Robot Framework
 ...              Testy przy uzyciu "Test Template"
 
-Metadata     Autor: Adam Osses
+Metadata     Autor: Adam Osses <adam.osses.ao@gmail.com>
 ...         Wersja: 1.0
 
 resource    resources/base.robot
 resource    resources/logowanie.robot
 
-Test Setup    Otworz Strone Demoblaze
+Test Setup       Otworz Strone Demoblaze
 Test Teardown    Zamknij Strone Demoblaze
 
 Test Template    Zaloguj sie
