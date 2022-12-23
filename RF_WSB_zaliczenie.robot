@@ -3,6 +3,8 @@ Documentation    WSB - Tester Oprogramowania
 ...              Praca zaliczeniowa z Robot Framework
 ...              Skrypt automatyzujacy przypadki testowe
 ...              Testowana strona: https://www.demoblaze.com
+...              Testy urzdzen mobilnych z wykorzystaniem APPIUM
+
 Metadata     Autor: Adam Osses <adam.osses.ao@gmail.com>
 ...         Wersja: 1.0
 
@@ -19,7 +21,8 @@ ID 001 Logowanie Bez Wprowadzenia Hasla
     Kliknij Log in
     Wprowadz Nazwe Uzytkownika    WSB_tester
     Kliknij Log in W Oknie Logowania
-    Alert Should Be Present    Please fill out Username and Password.
+    Sleep    2
+    # Alert Should Be Present <- w AppiumLibrary brak tego Keyworda - znalezc rozwiazanie!
 
 ID 002 Poprawnosc Kwoty Do Zaplaty
     Zamow Kilka Produktow
@@ -31,4 +34,7 @@ ID 003 Usuwanie Wszystkich Produktow Z Koszyka
     Przejdz Do Koszyka
     Usun Z Koszyka Zamowione Produkty
     Koszyk Powinien Byc Pusty
+
+
+
 

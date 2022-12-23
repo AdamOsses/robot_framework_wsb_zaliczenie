@@ -1,7 +1,7 @@
 *** Settings ***
 Documentation    Zmienne i keywordy obslugujace koszyk
 
-library    SeleniumLibrary
+library    AppiumLibrary
 
 *** Variables ***
 ${ADD_TO_A_CART_BTN}    //*[@class="btn btn-success btn-lg"]
@@ -14,19 +14,23 @@ ${LICZBA_ZAMOWIONYCH_PRODUKTOW}    ${0}
 
 *** Keywords ***
 Przejdz Do Koszyka
-    Click Link    ${CART}
+    Click Element    ${CART}
 
 Zamow Produkt
     [Arguments]    ${produkt}
-    Wait Until Page Contains Element    ${produkt}
-    Click Link    ${produkt}
+    #Wait Until Page Contains Element    ${produkt}
+    Sleep    7
+    Scroll Element Into View    ${produkt}   #- nadal.: ValueError: Element locator with prefix '(//img[@class' is not supported
+                                            #nie pomaga ani Scroll Element Into View ani  Scroll Down
+    Click Element    ${produkt}
     Wait Until Page Contains Element    ${ADD_TO_A_CART_BTN}
-    Click Link    ${ADD_TO_A_CART_BTN}
-    Handle Alert
-    Go To    ${URL}
+    Click Element    ${ADD_TO_A_CART_BTN}
+    #Handle Alert
+    Go To Url   ${URL}
 
 Zamow Kilka Produktow
-    ${liczba_wyswietlonych_produktow}=    Get Element Count    ${PRODUKT}
+    #${liczba_wyswietlonych_produktow}=    Get Element Count    ${PRODUKT}   <-- brak tego keya w Appium
+    ${liczba_wyswietlonych_produktow}=    Evaluate    9    # na razie 9 na sztywno
     ${nr}=    Convert To Integer    ${liczba_wyswietlonych_produktow}
     ${LICZBA_ZAMOWIONYCH_PRODUKTOW}=    Evaluate    random.randint(2, 9)    random
     Set Global Variable    ${LICZBA_ZAMOWIONYCH_PRODUKTOW}
@@ -52,7 +56,7 @@ Usun Z Koszyka Zamowione Produkty
     FOR    ${i}    IN RANGE   ${LICZBA_ZAMOWIONYCH_PRODUKTOW}
       Wait Until Page Does Not Contain Element    ${DELETE}
       Wait Until Page Contains Element    ${DELETE}    error=W koszyku powinien byc jeszcze co najmniej jeden produkt.
-      Click Link    ${DELETE}
+      Click Element    ${DELETE}
     END
 
 Koszyk Powinien Byc Pusty

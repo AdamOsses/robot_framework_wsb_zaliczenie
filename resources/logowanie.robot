@@ -1,13 +1,14 @@
 *** Settings ***
 Documentation    Zmienne i keywordy obslugujace logowanie uzytkownika
 
-library    SeleniumLibrary
+library    AppiumLibrary
 
 *** Variables ***
 ${LOG_IN_INDEX}    //*[@id="login2"]
 ${POLE_USERNAME}    //*[@id="loginusername"]
 ${POLE_HASLO}    //*[@id="loginpassword"]
 ${LOG_IN_OKNO_LOGOWANIA}    //button[contains(text(),'Log in')]
+${WELCOME_USER}    //*[@id="nameofuser"]
 
 ${POPRAWNA_NAZWA_UZYTKOWNIKA}    WSB_tester
 ${POPRAWNE_HASLO}    WSB_tester
@@ -22,20 +23,26 @@ Zaloguj Sie
     Wprowadz Nazwe Uzytkownika    ${login}
     Wprowadz Haslo    ${haslo}
     Kliknij Log in W Oknie Logowania
-    Alert Should Be Present
+    #Alert Should Be Present        <- brak KW w Appium
 
 
 Kliknij Log in
-    Click Element    ${LOG_IN_INDEX}
+    AppiumLibrary.Click Element    ${LOG_IN_INDEX}
+    Sleep    2
 
 Wprowadz Nazwe Uzytkownika
     [Arguments]    ${nazwa_uzytkownika}
     Input Text    ${POLE_USERNAME}    ${nazwa_uzytkownika}
+    #Log To Console    Input username - OK
+    Sleep    2
 
 Wprowadz Haslo
     [Arguments]    ${haslo}
-    Input Text    ${POLE_HASLO}    ${haslo}
+    Input Password    ${POLE_HASLO}    ${haslo}
+    Sleep    2
 
 Kliknij Log in W Oknie Logowania
-    Click Button    ${LOG_IN_OKNO_LOGOWANIA}
+    Click Element    ${LOG_IN_OKNO_LOGOWANIA}
+    #Log To Console    Klik Log In - OK
+    Sleep    2
 
